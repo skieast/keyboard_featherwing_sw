@@ -1,0 +1,3 @@
+[submodule "arduino/.\\hello_featherwing\\lib\\SdFat\\"]
+	path = arduino/.\\hello_featherwing\\lib\\SdFat\\
+	url = https://github.com/greiman/SdFat-beta.git
