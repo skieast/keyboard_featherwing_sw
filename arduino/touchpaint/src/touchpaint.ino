@@ -19,8 +19,8 @@
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <SPI.h>
 #include <Wire.h>      // this is needed even tho we aren't using it
-#include <Adafruit_ILI9341.h>
-#include <Adafruit_STMPE610.h>
+#include "Adafruit_ILI9341.h"
+#include "Adafruit_STMPE610.h"
 
 // This is calibration data for the raw touch data to the screen coordinates
 #define TS_MINX 150
@@ -28,13 +28,32 @@
 #define TS_MAXX 3800
 #define TS_MAXY 4000
 
+#ifdef  ARDUINO_FEATHER_ESP32
+  #define STMPE_CS 32
+  #define TFT_CS 15
+  #define TFT_DC 33
+  #define SD_CS 14
+  #define NEOPIXEL_PIN 27
+  #define SD_CONFIG SdSpiConfig(SD_CS, SHARED_SPI, SD_SCK_MHZ(10))
+#endif
+
+#if defined (__AVR_ATmega32U4__) || defined(ARDUINO_SAMD_FEATHER_M0) || defined (__AVR_ATmega328P__) || \
+    defined(ARDUINO_SAMD_ZERO) || defined(__SAMD51__) || defined(__SAM3X8E__) || defined(ARDUINO_NRF52840_FEATHER)
+  #define STMPE_CS 6
+  #define TFT_CS   9
+  #define TFT_DC   10
+  #define SD_CS    5
+  #define NEOPIXEL_PIN 11
+  #define SD_CONFIG SdSpiConfig(SD_CS, SHARED_SPI, SD_SCK_MHZ(50))
+#endif
+
+
+
+
 // The STMPE610 uses hardware SPI on the shield, and #8
-#define STMPE_CS 6
 Adafruit_STMPE610 ts = Adafruit_STMPE610(STMPE_CS);
 
 // The display also uses hardware SPI, plus #9 & #10
-#define TFT_CS 9
-#define TFT_DC 10
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
 // Size of the color selection boxes and the paintbrush size
